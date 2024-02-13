@@ -1,0 +1,79 @@
+import { DefaultizedPieValueType } from "@mui/x-charts";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import Wrapper from "../assets/stylingWrappers/Breakdown.ts";
+import { ITransaction } from "../models/context.ts";
+import { CATEGORIES } from "./index.ts";
+import BreakdownCategories from "../components/BreakdownCategories.tsx";
+import useFetch from "../hooks/useFetch.ts";
+
+const sizing = {
+  width: 300,
+  height: 300,
+  legend: { hidden: false },
+};
+
+const getValues = (transactions: ITransaction[]) => {
+  console.log(transactions);
+  const values: { [key: string]: number } = {};
+  transactions.forEach(
+    (t) =>
+      (values[t.category] = values[t.category]
+        ? values[t.category] + t.amount
+        : t.amount)
+  );
+  return values;
+};
+
+function Breakdown() {
+  const [apiData, serverError, isLoading] = useFetch(
+    "http://localhost:3000/v1/transactions/breakdown"
+  );
+  if (isLoading) return <div>Loading ...</div>;
+  if (serverError) return <div>{serverError}</div>;
+  if (!apiData) return <div>Loading ...</div>;
+
+  const values = getValues(apiData);
+  console.log(values);
+  const data = Object.keys(values).map((category) => {
+    return {
+      label: category,
+      value: Math.abs(values[category]),
+      color: CATEGORIES.find((c) => c.name === category)!.color,
+    };
+  });
+
+  console.log(data);
+
+  const TOTAL = data.map((item) => item.value).reduce((a, b) => a + b, 0);
+
+  const getArcLabel = (params: DefaultizedPieValueType) => {
+    const percent = params.value / TOTAL;
+    return `${(percent * 100).toFixed(0)}%`;
+  };
+
+  return (
+    <Wrapper>
+      <BreakdownCategories values={values} />
+      <div className="pie-chart">
+        <PieChart
+          series={[
+            {
+              outerRadius: 100,
+              data,
+              arcLabel: getArcLabel,
+            },
+          ]}
+          sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+              fill: "white",
+              fontSize: 14,
+            },
+          }}
+          {...sizing}
+        />
+      </div>
+    </Wrapper>
+  );
+}
+
+export default Breakdown;
