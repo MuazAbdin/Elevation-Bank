@@ -1,7 +1,7 @@
 import Transaction from "./Transaction";
 import Wrapper from "../assets/stylingWrappers/TransactionsTable.ts";
 
-function TransactionsTable({ transactions, onDeleteTransaction }) {
+function TransactionsTable({ transactions }) {
   return (
     <Wrapper>
       <caption>Transactions</caption>
@@ -16,11 +16,7 @@ function TransactionsTable({ transactions, onDeleteTransaction }) {
       </thead>
       <tbody>
         {transactions.map((t) => (
-          <Transaction
-            key={t._id}
-            {...t}
-            onDeleteTransaction={onDeleteTransaction}
-          />
+          <Transaction key={t._id} {...t} />
         ))}
       </tbody>
     </Wrapper>

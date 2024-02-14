@@ -7,6 +7,12 @@ import { faLocationDot, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 function MainHeader() {
   return (
     <Wrapper>
+      <Link to="/">
+        <div className="logo">
+          <img src={Logo} alt="Bank Logo" />
+          <span> Bank</span>
+        </div>
+      </Link>
       <nav>
         <menu>
           <li>
@@ -19,12 +25,6 @@ function MainHeader() {
           </li>
         </menu>
       </nav>
-      <Link to="/">
-        <div className="logo">
-          <img src={Logo} alt="Bank Logo" />
-          <span> Bank</span>
-        </div>
-      </Link>
     </Wrapper>
   );
 }

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { ITransaction } from "../models/context";
+import { useNavigation, useSubmit } from "react-router-dom";
 
 function getDate(date: Date): string {
   const month = date.getUTCMonth() + 1; // months from 1-12
@@ -8,19 +8,24 @@ function getDate(date: Date): string {
   return `${day}/${month}`;
 }
 
-function Transaction({
-  _id,
-  createdAt,
-  vendor,
-  category,
-  amount,
-  onDeleteTransaction,
-}: ITransaction) {
-  const amountStyle: string = amount < 10 ? "red" : "green";
+function Transaction(props) {
+  const { _id, createdAt, vendor, category, amount } = props;
+  const amountStyle: string = amount < 0 ? "red" : "green";
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
-  async function handleDelete(id: string) {
-    await deleteTransaction(id);
-    onDeleteTransaction(id);
+  async function handleDelete() {
+    if (isSubmitting) return;
+    const proceed = window.confirm("Are you sure?");
+    if (!proceed) return;
+    submit(
+      { _id },
+      {
+        method: "DELETE",
+        action: "/dashboard",
+      }
+    );
   }
 
   return (
@@ -38,7 +43,7 @@ function Transaction({
       </td>
       <td
         style={{ color: "var(--red-dark)", cursor: "pointer" }}
-        onClick={() => handleDelete(_id)}
+        onClick={handleDelete}
       >
         <FontAwesomeIcon icon={faTrashCan} />
       </td>
@@ -47,14 +52,3 @@ function Transaction({
 }
 
 export default Transaction;
-
-async function deleteTransaction(id: string) {
-  const response = await fetch(`http://localhost:3000/v1/transactions/${id}`, {
-    method: "DELETE",
-  });
-
-  if (!response.ok) throw response;
-  const resData = await response.json();
-  console.log(resData);
-  return resData;
-}

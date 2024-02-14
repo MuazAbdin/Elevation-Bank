@@ -26,11 +26,27 @@ export async function getAllTransactions(req: Request, res: Response) {
   }
 }
 
+const MIN_BALANCE = 500;
+
 export async function addTransaction(req: Request, res: Response) {
   try {
     const data = req.body as IPostTransactionBody;
+    if (data.amount < 0) {
+      const transactions = await Transaction.aggregate([
+        { $group: { _id: null, total: { $sum: "$amount" } } },
+      ]);
+      const total = transactions[0].total;
+
+      if (total < MIN_BALANCE) {
+        return res.status(403).send({
+          message: "insufficient balance",
+          balance: MIN_BALANCE,
+        });
+      }
+    }
+
     const newTransaction = new Transaction(data);
-    newTransaction.save();
+    await newTransaction.save();
     res.status(201).send(newTransaction);
   } catch (error) {
     const message = getErrorMessage(error);

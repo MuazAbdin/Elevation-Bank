@@ -7,7 +7,14 @@ import {
   Transfer,
   Loan,
   Breakdown,
+  Error,
 } from "../pages";
+import {
+  loader as transactoinsLoader,
+  action as deleteTransactionAction,
+} from "../pages/Current";
+import { loader as breakdownLoader } from "../pages/Breakdown";
+import { action as trasferAction } from "../pages/Transfer";
 
 const router = createBrowserRouter([
   {
@@ -21,21 +28,27 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <DashboardLayout />,
+        action: deleteTransactionAction,
         children: [
           {
             index: true,
             element: <Current />,
-            loader: async () => {
-              const response = await fetch(
-                "http://localhost:3000/v1/transactions"
-              );
-              if (!response.ok) throw new Error(response.statusText);
-              return await response.json();
-            },
+            errorElement: <Error />,
+            loader: transactoinsLoader,
           },
-          { path: "transfer", element: <Transfer /> },
+          {
+            path: "transfer",
+            element: <Transfer />,
+            loader: transactoinsLoader,
+            action: trasferAction,
+          },
           { path: "loan", element: <Loan /> },
-          { path: "breakdown", element: <Breakdown /> },
+          {
+            path: "breakdown",
+            element: <Breakdown />,
+            errorElement: <Error />,
+            loader: breakdownLoader,
+          },
         ],
       },
     ],

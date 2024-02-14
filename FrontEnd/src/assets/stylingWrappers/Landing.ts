@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.main`
-  margin-top: 3rem;
+  padding-top: 3rem;
 
   p {
     line-height: 1.25em;

@@ -7,6 +7,10 @@ const Wrapper = styled.section`
     font-size: 1.75em;
   }
 
+  form {
+    padding: 1rem;
+  }
+
   .form-row {
     margin: 1em;
     font-size: 1.25em;
@@ -26,6 +30,10 @@ const Wrapper = styled.section`
     font-family: var(--main-font);
     border: 1px solid var(--grey-500);
     border-radius: var(--border-radius);
+  }
+
+  input[name="amount"] {
+    width: calc(60% - 1ch);
   }
 
   select:required:invalid {

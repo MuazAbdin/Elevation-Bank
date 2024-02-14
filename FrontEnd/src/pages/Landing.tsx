@@ -4,9 +4,9 @@ import Wrapper from "../assets/stylingWrappers/Landing.ts";
 function Landing() {
   return (
     <Wrapper>
-      <h1>
+      <h2>
         Welcome to <strong>Elevation Bank</strong>
-      </h1>
+      </h2>
       <p>
         We're thrilled to have you here, ready to embark on a seamless and
         convenient banking journey with us. Our web application is designed with

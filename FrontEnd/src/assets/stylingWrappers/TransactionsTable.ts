@@ -5,6 +5,7 @@ const Wrapper = styled.table`
   font-size: 1.15rem;
   line-height: 1.5;
   text-align: center;
+  text-transform: capitalize;
 
   caption {
     font-size: 1.5em;

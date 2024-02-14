@@ -5,6 +5,7 @@ export { default as Current } from "./Current";
 export { default as Transfer } from "./Transfer";
 export { default as Loan } from "./Loan";
 export { default as Breakdown } from "./Breakdown";
+export { default as Error } from "./Error";
 
 export const CATEGORIES = [
   { id: 0, name: "Housing", color: "#e3342f" },

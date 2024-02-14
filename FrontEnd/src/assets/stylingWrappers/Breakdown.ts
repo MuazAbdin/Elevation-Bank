@@ -1,12 +1,17 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
+  header {
+    grid-area: header;
+  }
   table {
-    margin-top: 1rem;
+    grid-area: content;
+    margin-top: 1.5rem;
     width: 100%;
     font-size: 1.15rem;
     line-height: 1.5;
     text-align: center;
+    text-transform: capitalize;
   }
   thead {
     background-color: var(--primary-300);
@@ -14,7 +19,7 @@ const Wrapper = styled.section`
 
   caption {
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   tbody tr:nth-child(even) {
